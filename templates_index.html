@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Время фото</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    font-size: 16px;
+}
+button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+<h2>Изменение времени фото</h2>
+
+<form method="post" enctype="multipart/form-data">
+    <label>Дата и время первого фото</label>
+    <input type="datetime-local" name="start_time" required>
+
+    <label>Выбери фото (порядок важен)</label>
+    <input type="file" name="photos" multiple accept="image/jpeg" required>
+
+    <button type="submit">Обработать фото</button>
+</form>
+
+<p>📱 Работает на телефоне</p>
+</body>
+</html>
