@@ -13,14 +13,31 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
 def change_exif_time(input_path, output_path, dt):
-    exif_dict = piexif.load(input_path)
+    try:
+        exif_dict = piexif.load(input_path)
+    except Exception:
+        # если EXIF нет — создаём пустой
+        exif_dict = {
+            "0th": {},
+            "Exif": {},
+            "GPS": {},
+            "1st": {},
+            "thumbnail": None
+        }
+
     time_str = dt.strftime("%Y:%m:%d %H:%M:%S").encode()
 
     exif_dict["0th"][piexif.ImageIFD.DateTime] = time_str
     exif_dict["Exif"][piexif.ExifIFD.DateTimeOriginal] = time_str
     exif_dict["Exif"][piexif.ExifIFD.DateTimeDigitized] = time_str
 
-    piexif.insert(piexif.dump(exif_dict), output_path)
+    piexif.insert(piexif.dump(exif_dict), input_path)
+
+    # сохраняем копию
+    with open(input_path, "rb") as f:
+        with open(output_path, "wb") as out:
+            out.write(f.read())
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -55,3 +72,4 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
